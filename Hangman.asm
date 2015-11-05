@@ -36,8 +36,11 @@ main:
 	add $s7, $zero, $v0 #store secret length for later use
 	li $s0, 15 #set turn counter to 15
 	addi $s6, $v0, -1 #store number of to be guessed chars 
-
+	addi $t6, $zero, 1 #set changed flag to 1
 	InputLoop:	
+		beqz $t6, Found #do not decrease turns if letter was found
+		addi $s0, $s0, -1 #decrease turn counter
+		Found:
 		beqz $s6, Victory #check for victory
 		beqz $s0, Failure #check for failure
 		jal printNewLine
@@ -59,8 +62,8 @@ main:
 		move $s5, $v0 #store char
 		jal printNewLine
 		
-		addi $s0, $s0, -1 #decrease turns left
 		add $t0, $zero, $s7 #initialize run variable
+		addi $t6, $zero, 1 #set changed flag to 1
 		StringLoop:
 			la $t1, Secret
 			add $t1, $t1, $t0 #pointer to last char
@@ -72,6 +75,7 @@ main:
 			li $t5, 255 #get non ascii
 			sb $t5, 0($t1) #write in secret
 			addi $s6, $s6,  -1 #decrease to be found chars
+			add $t6, $zero, $zero #set changed flag to 0 
 			True:
 			beqz $t0, InputLoop #complete string checked, ask for next char
 			addi $t0,$t0, -1 #decrease run variable
