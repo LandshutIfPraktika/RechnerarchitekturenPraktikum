@@ -3,7 +3,7 @@
 	GuessLetter: .asciiz "Guess a letter:"
 	NewLine: .asciiz "\n"
 	CurrentSolution: .asciiz "__________________________________________________________"
-	FailureMessage: .asciiz "oh that is so sad, try again!"
+	FailureMessage: .asciiz "Oh, that is so sad, try again!"
 	VictoryMessage: .asciiz "Yeah, you got it!"
 	Secret: .space 51
 	
@@ -125,8 +125,3 @@ printNewLine:
 	la $a0, NewLine
 	syscall
 	jr $ra
-	
-	
-checkVictory:
-	
-	
