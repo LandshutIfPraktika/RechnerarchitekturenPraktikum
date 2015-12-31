@@ -18,8 +18,9 @@ Main:
 
 
 ProcUnnec:
-	li 	$t0,	-1
-	ble	$a0,	$t0,	EndProc	#<0 |return 23
+
+	li 	$t0,	0
+	blt	$a0,	$t0,	EndProc	#<0 |return 23
 	
 	li	$t0,	2
 	div  	$a0,	$t0 		#n%2
