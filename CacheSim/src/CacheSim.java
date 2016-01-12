@@ -223,7 +223,6 @@ class Set {
 
     }
 
-
 }
 
 /**
@@ -234,12 +233,14 @@ class Cache {
     private final int blockSize;
     private final Set[] sets;
     private final CacheSim cacheSim;
+    private final int indexBits;
 
 
     public Cache(final int blockBits, final int indexBits, final int associativity, final CacheSim cacheSim) {
         this.blockSize = 1 << blockBits;
         this.setCount = 1 << indexBits;
         this.cacheSim = cacheSim;
+        this.indexBits = indexBits;
 
         sets = new Set[setCount];
         for (int i = 0; i < sets.length; i++) {
@@ -250,7 +251,7 @@ class Cache {
 
     public void use(long address, int bytes) {
 
-        final int setNumber = (int) ((address / blockSize) % sets.length);
+        final int setNumber = (int) ((address >>> indexBits) % sets.length);
         final int storageSpace = blockSize - (int) address % blockSize;
         cacheSim.log(sets[setNumber].use(address));
         if (bytes > storageSpace) {
