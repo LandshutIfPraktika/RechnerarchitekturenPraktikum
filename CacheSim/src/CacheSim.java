@@ -84,19 +84,19 @@ public class CacheSim {
 
     public void log(final int code) {
         switch (code) {
-            case Set.HIT:
+            case Cache.HIT:
                 hits++;
                 if (verbose) {
                     System.out.print("hit ");
                 }
                 break;
-            case Set.MISS:
+            case Cache.MISS:
                 misses++;
                 if (verbose) {
                     System.out.print("miss ");
                 }
                 break;
-            case Set.EVICTION:
+            case Cache.EVICTION:
                 evictions++;
                 misses++;
                 if (verbose) {
@@ -173,9 +173,6 @@ public class CacheSim {
  * Created by s-gheldd on 12/26/15.
  */
 class Set {
-    public static final int MISS = 1;
-    public static final int HIT = 2;
-    public static final int EVICTION = 3;
 
     private final int associativity;
     final int blockSize;
@@ -204,7 +201,7 @@ class Set {
             if (blocks[i].isValid()) {
                 if (blocks[i].getTag() == tag) {
                     blocks[i].update(++useCounter);
-                    return Set.HIT; //hit
+                    return Cache.HIT; //hit
                 }
                 if (blocks[i].getUseCounter() < blocks[lastUsed].getUseCounter()) {
                     lastUsed = i;
@@ -215,10 +212,10 @@ class Set {
         }
         if (nonValid != -1) {
             blocks[nonValid].firstUse(address, ++useCounter);
-            return Set.MISS;
+            return Cache.MISS;
         } else {
             blocks[lastUsed].firstUse(address, ++useCounter);
-            return Set.EVICTION;
+            return Cache.EVICTION;
         }
 
     }
@@ -229,6 +226,10 @@ class Set {
  * Created by s-gheldd on 12/29/15.
  */
 class Cache {
+    public static final int MISS = 1;
+    public static final int HIT = 2;
+    public static final int EVICTION = 3;
+
     private final int setCount;
     private final int blockSize;
     private final Set[] sets;
