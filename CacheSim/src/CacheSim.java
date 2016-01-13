@@ -191,7 +191,7 @@ class Set {
         this.associativity = associativity;
         this.blocks = new Block[associativity];
         for (int i = 0; i < associativity; i++) {
-            blocks[i] = new Block(indexBits);
+            blocks[i] = new Block(indexBits + blockBits);
         }
         this.useCounter = 0;
     }
@@ -199,7 +199,7 @@ class Set {
     public int use(final long address) {
         int lastUsed = 0;
         int nonValid = -1;
-        final long tag = address >>> (indexBits);
+        final long tag = address >>> (indexBits + blockBits);
         for (int i = 0; i < associativity; i++) {
             if (blocks[i].isValid()) {
                 if (blocks[i].getTag() == tag) {
@@ -274,16 +274,16 @@ class Block {
 
     private long tag;
     private boolean valid;
-    private final int indexBits;
+    private final int shiftBits;
     private int useCounter;
 
-    Block(final int indexBits) {
-        this.indexBits = indexBits;
+    Block(final int shiftBits) {
+        this.shiftBits = shiftBits;
         this.valid = false;
     }
 
     public void firstUse(final long address, final int useCounter) {
-        this.tag = address >>> (indexBits);
+        this.tag = address >>> (shiftBits);
         this.useCounter = useCounter;
         this.valid = true;
 
